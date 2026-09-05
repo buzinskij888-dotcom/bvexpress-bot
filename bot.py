@@ -273,7 +273,7 @@ def main():
     app = Application.builder().token(TOKEN.strip()).build()
 
     app.add_handler(CommandHandler("start", start)) 
-        app.add_handler(CommandHandler("post_channel", post_channel))
+    app.add_handler(CommandHandler("post_channel", post_channel))
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, message)
     )
