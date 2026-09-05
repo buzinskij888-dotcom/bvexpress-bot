@@ -1,5 +1,5 @@
 import os
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup , InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -242,14 +242,38 @@ async def calculate(
         reply_markup=MAIN_KEYBOARD,
     )
 
+async def post_channel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(
+            "🧮 Розрахувати доставку",
+            url="https://t.me/BVexpress_calc_bot?start=channel"
+        )]
+    ])
 
+    text = (
+        "📦 РОЗРАХУНОК ВАРТОСТІ ДОСТАВКИ 🇩🇪➡️🇺🇦\n\n"
+        "⚖️ Бот автоматично розрахує фактичну та обʼємну вагу.\n\n"
+        "🚚 Без Нової пошти — 1 €/кг\n"
+        "📮 З Новою поштою — 1,50 €/кг\n"
+        "📦 Мінімальна вартість — 10 €\n"
+        "📄 Документи — 10 €\n\n"
+        "Натисніть кнопку нижче 👇"
+    )
+
+    await context.bot.send_message(
+        chat_id="@BV_express_888",
+        text=text,
+        reply_markup=keyboard
+    )
+    await update.message.reply_text("✅ Кнопку опубліковано в каналі!")
 def main():
     if not TOKEN:
         raise RuntimeError("BOT_TOKEN не знайдено")
 
     app = Application.builder().token(TOKEN.strip()).build()
 
-    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("start", start)) 
+        app.add_handler(CommandHandler("post_channel", post_channel))
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, message)
     )
